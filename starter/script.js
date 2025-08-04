@@ -373,3 +373,233 @@ DATA CAR 1: 'Tesla' going at 120 km/h, with a charge of 23%
 
 GOOD LUCK 😀
 */
+
+// const CarC = function (make, speed) {
+//   this.make = make;
+//   this.speed = speed;
+// };
+
+// const EV = function (make, speed, charge) {
+//   CarC.call(this, make, speed);
+//   this.charge = charge;
+// };
+
+// EV.prototype = Object.create(CarC.prototype);
+
+// EV.prototype.chargeBattery = function (chargeTo) {
+//   this.charge = chargeTo;
+// };
+
+// EV.prototype.acelerate = function () {
+//   this.speed += 20;
+//   this.charge--;
+//   console.log(
+//     `${this.make} going at ${this.speed}, with a charge of ${this.charge}%`
+//   );
+// };
+
+// const Tesla = new EV('Tesla', 120, 90);
+// Tesla.acelerate();
+
+// ES6 class declaration
+////////////////////////////////////
+// Classes Inheritance with child Classes
+
+// class PersonCl {
+//   constructor(fullName, birthYear) {
+//     this.fullName = fullName;
+//     this.birthYear = birthYear;
+//   }
+//   // Method will be added to proptype class
+//   calcAge() {
+//     console.log(2037 - this.birthYear);
+//   }
+
+//   // Another function (note without any , comma)
+//   greet() {
+//     console.log(`Hi ${this.firstName}`);
+//   }
+
+//   // Getter for a calcAge function
+//   get age() {
+//     return 2037 - this.birthYear;
+//   }
+
+//   // Setter for fullName logic
+//   set fullName(name) {
+//     if (name.includes(' ')) this._fullName = name;
+//     else alert(`${name} is not a full name`);
+//   }
+
+//   // Getter for the above fullName setter to avoid _fullName to combine wuth the orignal constructor's fullName.
+//   get fullName() {
+//     return this._fullName;
+//   }
+
+//   // Static method
+//   static hey() {
+//     console.log('peekaboo 🫣');
+//     console.log(this);
+//   }
+// }
+
+// class Studentcl extends PersonCl {
+//   constructor(fullName, birthYear, course) {
+//     // Always needs to happen first because this call will allow to happen this keyword to the class
+//     super(fullName, birthYear);
+//     this.course = course;
+//   }
+//   introduce() {
+//     console.log(
+//       `My name is ${this.fullName} and i am currently doing my degree in ${this.course}`
+//     );
+//   }
+
+//   calcAge() {
+//     console.log(
+//       `I,m ${2037 - this.birthYear} years old, but i feel more like a ${
+//         2037 - this.birthYear + 10
+//       }`
+//     );
+//   }
+// }
+
+// const amar = new Studentcl('Amar bin alaas', 1992, 'Computer Science');
+// amar.introduce();
+// amar.calcAge();
+
+// ////////////////////////////////////
+// // Object.Create Inheritance
+// const PersonProto = {
+//   cacAge() {
+//     console.log(2037 - this.birthYear);
+//   },
+
+//   init(firstName, birthYear) {
+//     this.firstName = firstName;
+//     this.birthYear = birthYear;
+//   },
+// };
+
+// const sulman = Object.create(PersonProto);
+
+// const StudentProto = Object.create(PersonProto);
+// StudentProto.init = function (firstName, birthYear, course) {
+//   PersonProto.init.call(this, firstName, birthYear);
+//   this.course = course;
+// };
+
+// StudentProto.introduce = function () {
+//   console.log(
+//     `My name is ${this.firstName} and i am currently doing my degree in ${this.course}`
+//   );
+// };
+// const jamal = Object.create(StudentProto);
+// jamal.init('Jamal', 2002, 'Physcology');
+// jamal.introduce();
+// jamal.cacAge();
+
+// ////////////////////////////////////
+// // more classes Functions
+
+// class Account {
+//   constructor(owner, currency, pin) {
+//     this.owner = owner;
+//     this.currency = currency;
+//     this.pin = pin;
+//     this.movements = [];
+//     this.locale = navigator.language;
+//   }
+
+//   deposite(val) {
+//     this.movements.push(val);
+//   }
+
+//   withdraw(val) {
+//     this.deposite(-val);
+//   }
+
+//   approvLoan(val) {
+//     return true;
+//   }
+
+//   requestLoan(val) {
+//     if (this.approvLoan(val)) {
+//       this.deposite(val);
+//       console.log(`Loan Approved!`);
+//     }
+//   }
+// }
+
+// const ahmed = new Account('Syed Muhammad Ahmed Bukhari', 'PKR', 1111);
+
+// ahmed.deposite(123);
+// ahmed.withdraw(252);
+
+// console.log(ahmed);
+// ahmed.requestLoan();
+// console.log(ahmed);
+
+////////////////////////////////////
+// Encapsulation: Private class fields and methods.
+
+// 1) Public fields
+// 2) Private fields
+// 1) Public Methods
+// 1) Public Methods
+// STATIC VERSION OF ALL THESE 4
+
+class Account {
+  locale = navigator.language;
+  bank = 'Al Habib bank'; // This is also a very good candidate to appear in all our account therefore is the public fields
+
+  // Private fields
+  #movements = [];
+
+  #pin; // but now we really need to specify it inside the constructor
+
+  constructor(owner, currency, pin) {
+    this.owner = owner;
+    this.currency = currency;
+    this.#pin = pin;
+    // this.movements = [];
+    // this.locale = navigator.language; // We do make it public fields so tht it is gonaa appear on every accounts
+  }
+
+  // These all are the public methods
+  deposite(val) {
+    this.#movements.push(val);
+  }
+
+  withdraw(val) {
+    this.deposite(-val);
+  }
+
+  #approvLoan(val) {
+    // Fake method really which can t be approved by the developers and other user so we do make it private by using # symbol in it
+    return true;
+  }
+
+  requestLoan(val) {
+    if (this.approvLoan(val)) {
+      this.deposite(val);
+      console.log(`Loan Approved!`);
+    }
+  }
+
+  static #Test() {
+    console.log('Test');
+  }
+}
+
+const ahmed = new Account('Syed Muhammad Ahmed Bukhari', 'PKR', 1111);
+
+ahmed.deposite(123);
+ahmed.withdraw(252);
+// console.log(ahmed.#movements); Now we can't access or mutate the movements array from outside the classfield
+
+console.log(ahmed);
+console.log(ahmed.pin);
+// ahmed.#approvLoan(233); // see we can't manupulate or mutate it by using someother thinge
+
+Account.Test();
