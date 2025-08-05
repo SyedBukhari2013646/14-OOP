@@ -566,13 +566,19 @@ class Account {
     // this.locale = navigator.language; // We do make it public fields so tht it is gonaa appear on every accounts
   }
 
+  getMovements() {
+    return this.#movements;
+  }
+
   // These all are the public methods
   deposite(val) {
     this.#movements.push(val);
+    return this;
   }
 
   withdraw(val) {
     this.deposite(-val);
+    return this;
   }
 
   #approvLoan(val) {
@@ -581,10 +587,11 @@ class Account {
   }
 
   requestLoan(val) {
-    if (this.approvLoan(val)) {
+    if (this.#approvLoan(val)) {
       this.deposite(val);
       console.log(`Loan Approved!`);
     }
+    return this;
   }
 
   static #Test() {
@@ -594,12 +601,66 @@ class Account {
 
 const ahmed = new Account('Syed Muhammad Ahmed Bukhari', 'PKR', 1111);
 
-ahmed.deposite(123);
-ahmed.withdraw(252);
+// ahmed.deposite(123);
+// ahmed.withdraw(252);
 // console.log(ahmed.#movements); Now we can't access or mutate the movements array from outside the classfield
+const movementsAhmed = ahmed
+  .deposite(300)
+  .withdraw(100)
+  .withdraw(50)
+  .requestLoan(2300)
+  .deposite(4000)
+  .getMovements();
 
 console.log(ahmed);
 console.log(ahmed.pin);
 // ahmed.#approvLoan(233); // see we can't manupulate or mutate it by using someother thinge
+console.log(movementsAhmed);
 
-Account.Test();
+///////////////////////////////////////
+// Coding Challenge #4
+/* 
+1. Re-create challenge #3, but this time using ES6 classes: create an 'EVCl' child class of the 'CarCl' class
+2. Make the 'charge' property private;
+3. Implement the ability to chain the 'accelerate' and 'chargeBattery' methods of this class,
+ and also update the 'brake' method in the 'CarCl' class. They experiment with chaining!
+
+DATA CAR 1: 'Rivian' going at 120 km/h, with a charge of 23%
+
+GOOD LUCK 😀
+*/
+
+class CarC {
+  constructor(make, speed) {
+    this.make = make;
+    this.speed = speed;
+  }
+}
+class EVCL extends CarC {
+  #charge;
+
+  constructor(make, speed, charge) {
+    super(make, speed);
+    this.#charge = charge;
+  }
+
+  chargeBattery(charge) {
+    this.#charge = charge;
+    return this;
+  }
+
+  acelerate() {
+    this.speed += 20;
+    this.#charge--;
+    console.log(
+      `${this.make} going at ${this.speed}, with a charge of ${this.#charge}%`
+    );
+    return this;
+  }
+}
+
+const Rivian = new EVCL('Rivian', 120, 30);
+
+console.log(Rivian);
+// console.log(Rivian.#charge);
+Rivian.acelerate().acelerate().acelerate().chargeBattery(50).acelerate();
